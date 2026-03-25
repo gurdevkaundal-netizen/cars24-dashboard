@@ -100,64 +100,6 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--sub);border-top
 </head>
 <body>
 
-<style>
-#pw-overlay{{position:fixed;inset:0;background:#1a1a2e;display:flex;align-items:center;
-  justify-content:center;z-index:99999;flex-direction:column;gap:18px;font-family:'Segoe UI',system-ui,sans-serif}}
-#pw-box{{background:#1e293b;border:1px solid #334155;border-radius:16px;padding:40px 44px;
-  text-align:center;max-width:380px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.6)}}
-#pw-logo{{background:#e8002d;color:#fff;font-weight:800;font-size:18px;padding:6px 14px;
-  border-radius:6px;display:inline-block;margin-bottom:18px;letter-spacing:1px}}
-#pw-title{{color:#e2e8f0;font-size:20px;font-weight:700;margin-bottom:6px}}
-#pw-sub{{color:#94a3b8;font-size:13px;margin-bottom:24px}}
-#pw-input{{width:100%;background:#0f172a;border:1px solid #334155;border-radius:8px;
-  padding:11px 14px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;
-  text-align:center;letter-spacing:2px}}
-#pw-input:focus{{border-color:#e8002d}}
-#pw-btn{{width:100%;background:#e8002d;color:#fff;border:none;border-radius:8px;
-  padding:11px;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;transition:.15s}}
-#pw-btn:hover{{background:#c0001f}}
-#pw-err{{color:#f87171;font-size:12px;margin-top:8px;min-height:18px}}
-</style>
-<div id="pw-overlay">
-  <div id="pw-box">
-    <div id="pw-logo">CARS24</div>
-    <div id="pw-title">Dashboard Access</div>
-    <div id="pw-sub">Enter the team password to continue</div>
-    <input id="pw-input" type="password" placeholder="Password" autofocus
-           onkeydown="if(event.key==='Enter')checkPw()"/>
-    <button id="pw-btn" onclick="checkPw()">Unlock Dashboard</button>
-    <div id="pw-err"></div>
-  </div>
-</div>
-<script>
-(function(){{
-  // Check session storage — already authenticated this session
-  if(sessionStorage.getItem('cars24_auth')==='1'){{
-    document.addEventListener('DOMContentLoaded',function(){{
-      var o=document.getElementById('pw-overlay');
-      if(o)o.remove();
-    }});
-    return;
-  }}
-  async function sha256(msg){{
-    var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  }}
-  window.checkPw=async function(){{
-    var v=document.getElementById('pw-input').value;
-    var h=await sha256(v);
-    if(h==='957ea891eb773ea0c672a4749d36c42420d141c17caee319f3f691271c87949c'){{
-      sessionStorage.setItem('cars24_auth','1');
-      document.getElementById('pw-overlay').remove();
-    }}else{{
-      document.getElementById('pw-err').textContent='Incorrect password — please try again.';
-      document.getElementById('pw-input').value='';
-      document.getElementById('pw-input').focus();
-    }}
-  }};
-}})();
-</script>
-
 <header>
   <div class="logo">
     <div class="logo-box">C24</div>
@@ -165,7 +107,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--sub);border-top
     <div class="h-sub">CARS24 Chatbot · Session outcome analysis</div></div>
   </div>
   <div class="h-right">
-    <div class="live"><span class="dot"></span>Data as of 25 Mar 2026, 07:27 PM</div>
+    <div class="live"><span class="dot"></span>Data as of 25 Mar 2026, 08:05 PM</div>
     <div class="nav">
       <a href="dashboard_metrics.html" class="on">📊 Metrics</a>
       <a href="dashboard_qualitative.html">💡 Qualitative</a>
@@ -648,7 +590,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--sub);border-top
   }
 })();
 </script>
-<footer>CARS24 Chatbot Intelligence · Generated 25 Mar 2026, 07:27 PM · Refresh: <code>python generate_dashboards.py</code></footer>
+<footer>CARS24 Chatbot Intelligence · Generated 25 Mar 2026, 08:05 PM · Refresh: <code>python generate_dashboards.py</code></footer>
 <script>
 // ── Client-side session recompute for date filter ────────────────────────────
 function recompute(sl){
