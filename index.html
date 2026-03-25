@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CARS24 Chatbot Intelligence</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#1a1a2e;color:#e2e8f0;
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.logo{background:#e8002d;color:#fff;font-weight:800;font-size:22px;padding:8px 18px;
+  border-radius:8px;letter-spacing:1px}
+h1{font-size:26px;font-weight:700;text-align:center}
+p{color:#94a3b8;font-size:14px;text-align:center}
+.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
+.card{background:#1e293b;border:1px solid #334155;border-radius:14px;padding:28px 32px;
+  text-align:center;text-decoration:none;color:#e2e8f0;transition:.2s;min-width:200px}
+.card:hover{border-color:#e8002d;transform:translateY(-3px);box-shadow:0 8px 30px rgba(232,0,45,.2)}
+.card-icon{font-size:36px;margin-bottom:12px}
+.card-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.card-sub{font-size:12px;color:#94a3b8}
+footer{font-size:12px;color:#475569}
+</style>
+</head>
+<body>
+  <div class="logo">CARS24</div>
+  <div>
+    <h1>Chatbot Intelligence Hub</h1>
+    <p style="margin-top:8px">Select a dashboard to view</p>
+  </div>
+  <div class="cards">
+    <a class="card" href="dashboard_metrics.html">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Performance Metrics</div>
+      <div class="card-sub">Sessions · Auction · Tickets · Trends</div>
+    </a>
+    <a class="card" href="dashboard_qualitative.html">
+      <div class="card-icon">🔍</div>
+      <div class="card-title">Qualitative Insights</div>
+      <div class="card-sub">Strengths · Issues · Regions · Gaps</div>
+    </a>
+  </div>
+  <footer>CARS24 Chatbot Intelligence · Auto-generated</footer>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "name": "cars24-dashboard",
+  "builds": [
+    { "src": "*.html", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/", "dest": "/index.html" },
+    { "src": "/metrics", "dest": "/dashboard_metrics.html" },
+    { "src": "/qualitative", "dest": "/dashboard_qualitative.html" }
+  ]
+}
