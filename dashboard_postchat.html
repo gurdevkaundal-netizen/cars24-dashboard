@@ -128,7 +128,7 @@ footer{text-align:center;padding:20px;color:#475569;font-size:12px;border-top:1p
           <th class="num">EHB/TP</th>
           <th class="num">Accepted</th>
           <th class="num">A2C / Token</th>
-          <th class="num">% of Total</th>
+          <th class="num">Raised%</th>
           <th class="num">Acceptance%</th>
           <th class="num">Conversion%</th>
         </tr>
@@ -173,7 +173,7 @@ footer{text-align:center;padding:20px;color:#475569;font-size:12px;border-top:1p
   </div>
 
 </div>
-<footer>Generated: 31 Mar 2026, 11:48 AM &nbsp;·&nbsp; CARS24 Chatbot Intelligence</footer>
+<footer>Generated: 31 Mar 2026, 03:49 PM &nbsp;·&nbsp; CARS24 Chatbot Intelligence</footer>
 
 <script>
 (function(){
@@ -202,7 +202,7 @@ REGIONS.forEach(function(r){
 // Set default dates
 document.getElementById('dt-from').value = '2026-01-15';
 document.getElementById('dt-to').value   = '2026-03-30';
-document.getElementById('gen-info').textContent = 'Generated 31 Mar 2026, 11:48 AM';
+document.getElementById('gen-info').textContent = 'Generated 31 Mar 2026, 03:49 PM';
 
 function n(v){ return (v===null||v===undefined||v!==v) ? null : +v; }
 function fmt(v){ if(v===null||v===undefined||isNaN(v)) return '-'; return Math.round(v).toLocaleString('en-IN'); }
@@ -268,19 +268,28 @@ function recompute(){
   // D11: CX_PAI_OCB_ACCEPTED>=1 AND New Token issued (matches Excel formula)
   var fA2c   = fRows.filter(function(r){ return n(r[11])>=1 && r[13]>0; }).length;
 
-  // ── Re-Raised by RA ──
-  var rrCount  = tf.filter(function(r){ return n(r[14])>=1; }).length;
-  var rraCount = tf.filter(function(r){ return n(r[15])>=1; }).length;
+  // ── Re-Raised by RA (subset of First Raise rows that had a re-raise) ──
+  var rrRows   = fRows.filter(function(r){ return n(r[14])>=1; });
+  var rrCount  = rrRows.length;
+  var rraCount = rrRows.filter(function(r){ return n(r[15])>=1; }).length;
+  var rrA2c    = rrRows.filter(function(r){ return n(r[15])>=1 && r[13]>0; }).length;  // Re-Raised Acc + token
+  var rrEhbTp  = sumDiv(rrRows, function(r){ return n(r[9]); }, function(r){ return n(r[6]); });
 
   // ── Ticket by Bot (Category=ticket) ──
   var tktRows  = tf.filter(function(r){ return r[12]==='t'; });
+  var tktAcc   = tktRows.filter(function(r){ return n(r[10])>=1; }).length;
+  var tktA2c   = tktRows.filter(function(r){ return r[13]>0; }).length;
+  var tktEhbTp = sumDiv(tktRows, function(r){ return n(r[9]); }, function(r){ return n(r[6]); });
 
   // ── Drop / No Action (Category=drop) ──
   var dropRows = tf.filter(function(r){ return r[12]==='d'; });
+  var dropAcc  = dropRows.filter(function(r){ return n(r[10])>=1; }).length;
+  var dropA2c  = dropRows.filter(function(r){ return r[13]>0; }).length;
+  var dropEhbTp= sumDiv(dropRows, function(r){ return n(r[9]); }, function(r){ return n(r[6]); });
 
   // ── Overall Bot (PAI_OCB_CREATED>=1) ──
   var ovRows  = tf.filter(function(r){ return n(r[7])>=1; });
-  var ovEhbTp = avgWhere(ovRows, function(r){ return n(r[18]); });
+  var ovEhbTp = sumDiv(ovRows, function(r){ return n(r[9]); }, function(r){ return n(r[6]); });
   var ovAcc   = tf.filter(function(r){ return n(r[10])>=1; }).length;
   var ovA2c   = tf.filter(function(r){ return n(r[13])>0; }).length;
 
@@ -289,8 +298,7 @@ function recompute(){
   var cTotal = _cUniq(cf);
   var cRaisedRows = cf.filter(function(r){ return n(r[7])>=1; });
   var cRaised = _cUniq(cRaisedRows);
-  var cEhbRows    = cf.filter(function(r){ var v=n(r[11]); return v!==null && v>=0.5 && v<=2.0; });
-  var cEhbTp  = sumDiv(cEhbRows, function(r){ return n(r[9]); }, function(r){ return n(r[6]); });
+  var cEhbTp  = sumDiv(cRaisedRows, function(r){ return n(r[9]); }, function(r){ return n(r[6]); });
   var cAcc    = _cUniq(cf.filter(function(r){ return n(r[7])>=1 && n(r[8])>=1; }));
   var cA2c    = _cUniq(cf.filter(function(r){ return n(r[7])>=1 && n(r[8])>=1 && n(r[10])>0; }));
   var cToken  = _cUniq(cf.filter(function(r){ return n(r[10])>0; }));
@@ -337,36 +345,36 @@ function recompute(){
   var tr2=document.createElement('tr');
   tr2.innerHTML='<td>🔄 Re-Raised by RA</td>'+
     '<td class="num">'+fmt(rrCount)+'</td>'+
-    '<td class="num">-</td>'+
+    '<td class="num ehbtp">'+fmtR(rrEhbTp)+'</td>'+
     '<td class="num">'+fmt(rraCount)+'</td>'+
-    '<td class="num">-</td>'+
+    '<td class="num">'+fmt(rrA2c)+'</td>'+
     '<td class="num pct">'+pct(rrCount,tTotal)+'</td>'+
     '<td class="num pct">'+pct(rraCount,rrCount)+'</td>'+
-    '<td class="num pct">-</td>';
+    '<td class="num pct">'+pct(rrA2c,rraCount)+'</td>';
   tbody.appendChild(tr2);
 
   // Ticket by Bot row
   var tr3=document.createElement('tr');
   tr3.innerHTML='<td>🎫 Ticket by Bot</td>'+
     '<td class="num">'+fmt(tktRows.length)+'</td>'+
-    '<td class="num">-</td>'+
-    '<td class="num">-</td>'+
-    '<td class="num">-</td>'+
+    '<td class="num ehbtp">'+fmtR(tktEhbTp)+'</td>'+
+    '<td class="num">'+fmt(tktAcc)+'</td>'+
+    '<td class="num">'+fmt(tktA2c)+'</td>'+
     '<td class="num pct">'+pct(tktRows.length,tTotal)+'</td>'+
-    '<td class="num pct">-</td>'+
-    '<td class="num pct">-</td>';
+    '<td class="num pct">'+pct(tktAcc,tktRows.length)+'</td>'+
+    '<td class="num pct">'+pct(tktA2c,tktAcc)+'</td>';
   tbody.appendChild(tr3);
 
   // Drop / No Action row
   var tr4=document.createElement('tr');
   tr4.innerHTML='<td>🚫 Drop / No Action</td>'+
     '<td class="num">'+fmt(dropRows.length)+'</td>'+
-    '<td class="num">-</td>'+
-    '<td class="num">-</td>'+
-    '<td class="num">-</td>'+
+    '<td class="num ehbtp">'+fmtR(dropEhbTp)+'</td>'+
+    '<td class="num">'+fmt(dropAcc)+'</td>'+
+    '<td class="num">'+fmt(dropA2c)+'</td>'+
     '<td class="num pct">'+pct(dropRows.length,tTotal)+'</td>'+
-    '<td class="num pct">-</td>'+
-    '<td class="num pct">-</td>';
+    '<td class="num pct">'+pct(dropAcc,dropRows.length)+'</td>'+
+    '<td class="num pct">'+pct(dropA2c,dropAcc)+'</td>';
   tbody.appendChild(tr4);
 
   // Overall row
@@ -412,13 +420,13 @@ function recompute(){
     ['Total Leads', fmt(tTotal), fmt(cTotal)],
     ['Raised', fmt(ovRows.length), fmt(cRaised)],
     ['EHB/TP', fmtR(ovEhbTp), fmtR(cEhbTp)],
-    ['Accepted', fmt(ovAcc), fmt(cAcc)],
-    ['A2C', fmt(ovA2c), fmt(cA2c)],
-    ['Token', fmt(ovA2c), fmt(cToken)],
+    ['Acceptance', fmt(ovAcc), fmt(cAcc)],
+    ['A2C', fmt(fA2c), fmt(cA2c)],
+    ['Total tokens', fmt(ovA2c), fmt(cToken)],
     ['Raised%', pct(ovRows.length,tTotal), pct(cRaised,cTotal)],
-    ['Acceptance%', pct(ovAcc,ovRows.length), pct(cAcc,cRaised)],
-    ['Converted% (A2C/Acc)', pct(ovA2c,ovAcc), pct(cA2c,cAcc)],
-    ['Conversion (Token/Leads)', pct(ovA2c,tTotal), pct(cToken,cTotal)],
+    ['Acceptance% (multi-raise)', pct(ovAcc,ovRows.length), pct(cAcc,cRaised)],
+    ['A2C% (A2C/Accepted)', pct(fA2c,ovAcc), pct(cA2c,cAcc)],
+    ['Overall conversion (Token/Leads)', pct(ovA2c,tTotal), pct(cToken,cTotal)],
   ];
   cmpRows.forEach(function(r){
     var tr=document.createElement('tr');
