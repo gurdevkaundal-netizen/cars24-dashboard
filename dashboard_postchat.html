@@ -428,19 +428,4 @@ function recompute(){
     ['A2C% (A2C/Accepted)', pct(fA2c,ovAcc), pct(cA2c,cAcc)],
     ['Overall conversion (Token/Leads)', pct(ovA2c,tTotal), pct(cToken,cTotal)],
   ];
-  cmpRows.forEach(function(r){
-    var tr=document.createElement('tr');
-    tr.innerHTML='<td>'+r[0]+'</td><td class="num test-col">'+r[1]+'</td><td class="num ctrl-col">'+r[2]+'</td>';
-    cmpTbody.appendChild(tr);
-  });
-}
-
-// Attach listeners
-['dt-from','dt-to','case-type','region','gs','c2b'].forEach(function(id){
-  document.getElementById(id).addEventListener('change', recompute);
-});
-recompute();
-})();
-</script>
-</body>
-</html>
+  cmpR
