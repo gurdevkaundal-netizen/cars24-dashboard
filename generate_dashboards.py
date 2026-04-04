@@ -2663,9 +2663,6 @@ def generate(offline=False, csv_path=None):
     if git_dir.exists():
         try:
             files = ["dashboard_metrics.html", "dashboard_qualitative.html", "dashboard_postchat.html", "index.html"]
-            # Pull latest remote changes first to avoid push rejection
-            subprocess.run(["git", "-C", str(OUT_DIR), "pull", "--rebase", "origin", "main"],
-                           check=False, capture_output=True)
             subprocess.run(["git", "-C", str(OUT_DIR), "add"] + files,
                            check=False, capture_output=True)
             result = subprocess.run(
@@ -2675,8 +2672,10 @@ def generate(offline=False, csv_path=None):
             if "nothing to commit" in result.stdout + result.stderr:
                 print("\n   GitHub: No changes to publish.")
             else:
+                # Use --force-with-lease: safe force-push that won't overwrite
+                # unexpected remote changes, but handles diverged history cleanly.
                 push = subprocess.run(
-                    ["git", "-C", str(OUT_DIR), "push", "origin", "main"],
+                    ["git", "-C", str(OUT_DIR), "push", "--force-with-lease", "origin", "main"],
                     capture_output=True, text=True)
                 if push.returncode == 0:
                     print(f"\n   ✅ Published to GitHub Pages!")
