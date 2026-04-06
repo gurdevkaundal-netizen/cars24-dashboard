@@ -107,7 +107,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--sub);border-top
     <div class="h-sub">CARS24 Chatbot · Session outcome analysis</div></div>
   </div>
   <div class="h-right">
-    <div class="live"><span class="dot"></span>Data as of 06 Apr 2026, 11:59 AM</div>
+    <div class="live"><span class="dot"></span>Data as of 06 Apr 2026, 12:17 PM</div>
     <div class="nav">
       <a href="dashboard_metrics.html" class="on">📊 Metrics</a>
       <a href="dashboard_qualitative.html">💡 Qualitative</a>
@@ -590,7 +590,7 @@ footer{text-align:center;padding:22px;font-size:12px;color:var(--sub);border-top
   }
 })();
 </script>
-<footer>CARS24 Chatbot Intelligence · Generated 06 Apr 2026, 11:59 AM · Refresh: <code>python generate_dashboards.py</code></footer>
+<footer>CARS24 Chatbot Intelligence · Generated 06 Apr 2026, 12:17 PM · Refresh: <code>python generate_dashboards.py</code></footer>
 <script>
 // ── Client-side session recompute for date filter ────────────────────────────
 function recompute(sl){
@@ -645,7 +645,7 @@ function recompute(sl){
   var rg=allRg.map(function(r){return{region:r,dsq:rgMap.DSQ[r]||0,qnr:rgMap.QNR[r]||0};});
   var GB=["Same Day","1-3 days","3-5 days","5-10 days","10-20 days","20-30 days",">30 days"];
   function gBkt(g){if(g===0)return"Same Day";if(g<=3)return"1-3 days";if(g<=5)return"3-5 days";if(g<=10)return"5-10 days";if(g<=20)return"10-20 days";if(g<=30)return"20-30 days";return">30 days";}
-  var ig={dsq:GB.map(function(){return 0;}),qnr:GB.map(function(){return 0;})};
+  var ig={buckets:GB,dsq:GB.map(function(){return 0;}),qnr:GB.map(function(){return 0;})};
   sl.forEach(function(s){
     if(!s.id||!s.d)return;
     var gap=Math.round((new Date(s.d)-new Date(s.id))/864e5);
